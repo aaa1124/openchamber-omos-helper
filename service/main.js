@@ -463,7 +463,7 @@ function savePreset(body) {
   if (!isObject(parsed.presets) || !isObject(parsed.presets[presetName])) {
     return { ok: false, error: "Patched config failed validation" };
   }
-  const backup = `${file}.pantheon-backup`;
+  const backup = `${file}.openchamber-omos-helper-backup`;
   try {
     fs.writeFileSync(backup, fs.readFileSync(file), "utf8");
   } catch {}
@@ -539,6 +539,6 @@ var server = http.createServer(async (req, res) => {
   }
 });
 server.listen(PORT, "127.0.0.1", () => {
-  process.stderr.write(`[pantheon] listening on 127.0.0.1:${PORT}
+  process.stderr.write(`[openchamber-omos-helper] listening on 127.0.0.1:${PORT}
 `);
 });

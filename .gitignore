@@ -1,3 +1,4 @@
 node_modules/
 .DS_Store
-*.pantheon-backup
+*.openchamber-omos-helper-backup
+AGENTS.md

@@ -1,5 +1,5 @@
 /**
- * Pantheon — service for the OpenChamber extension that edits
+ * openchamber-omos-helper — service for the OpenChamber extension that edits
  * oh-my-opencode-slim presets (`~/.config/opencode/oh-my-opencode-slim.json[c]`).
  *
  * Runs as the host-spawned guest service on 127.0.0.1. Every request carries
@@ -492,7 +492,7 @@ function savePreset(body) {
     return { ok: false, error: 'Patched config failed validation' };
   }
 
-  const backup = `${file}.pantheon-backup`;
+  const backup = `${file}.openchamber-omos-helper-backup`;
   try {
     fs.writeFileSync(backup, fs.readFileSync(file), 'utf8');
   } catch {
@@ -577,5 +577,5 @@ const server = http.createServer(async (req, res) => {
 });
 
 server.listen(PORT, '127.0.0.1', () => {
-  process.stderr.write(`[pantheon] listening on 127.0.0.1:${PORT}\n`);
+  process.stderr.write(`[openchamber-omos-helper] listening on 127.0.0.1:${PORT}\n`);
 });

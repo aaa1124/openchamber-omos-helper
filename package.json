@@ -12,8 +12,8 @@
     },
     "contributes": {
       "panel": {
-        "id": "pantheon",
-        "name": "Pantheon",
+        "id": "openchamber-omos-helper",
+        "name": "openchamber-omos-helper",
         "icon": "icon.svg",
         "entry": "panel/index.html"
       },

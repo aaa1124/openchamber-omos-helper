@@ -119,7 +119,7 @@ async function load() {
       info.code === 'NO_SERVICE'
         ? {
             kind: 'error',
-            text: 'The local service is not approved yet. Settings → Extensions → Pantheon → allow the local service, then press Reload.',
+            text: 'The local service is not approved yet. Settings → Extensions → openchamber-omos-helper → allow the local service, then press Reload.',
           }
         : { kind: 'error', text: info.text };
   } finally {
@@ -184,7 +184,7 @@ function render() {
   const header = el(
     'div',
     { class: 'row spread' },
-    el('h1', { text: 'Pantheon' }),
+    el('h1', { text: 'openchamber-omos-helper' }),
     el('button', {
       type: 'button',
       text: 'Reload',
@@ -246,11 +246,11 @@ function render() {
   }
 
   const datalists = el('div', { hidden: true });
-  const modelList = el('datalist', { id: 'pantheon-models' });
+  const modelList = el('datalist', { id: 'openchamber-omos-helper-models' });
   for (const model of [...state.models].sort((a, b) => `${a.providerID}/${a.id}`.localeCompare(`${b.providerID}/${b.id}`))) {
     modelList.append(el('option', { value: `${model.providerID}/${model.id}`, label: model.name }));
   }
-  const variantList = el('datalist', { id: 'pantheon-variants' });
+  const variantList = el('datalist', { id: 'openchamber-omos-helper-variants' });
   for (const variant of state.variants) variantList.append(el('option', { value: variant }));
   datalists.append(modelList, variantList);
   root.append(datalists);
@@ -262,7 +262,7 @@ function render() {
     const config = draft[name];
     const modelInput = el('input', {
       type: 'text',
-      list: 'pantheon-models',
+      list: 'openchamber-omos-helper-models',
       value: config.model,
       spellcheck: 'false',
       placeholder: 'provider/model',
@@ -274,7 +274,7 @@ function render() {
 
     const variantInput = el('input', {
       type: 'text',
-      list: 'pantheon-variants',
+      list: 'openchamber-omos-helper-variants',
       value: config.variant,
       spellcheck: 'false',
       placeholder: 'variant',

@@ -28,7 +28,7 @@ writes the config file the plugin already reads.
 2. Approve the local service when asked. The service is the Node process that
    reads and writes the config file; the panel is a sandboxed iframe and cannot
    touch the filesystem itself.
-3. Open the **Pantheon** icon in the rail.
+3. Open the **openchamber-omos-helper** icon in the rail.
 
 The extension is installed in place, so edits to the checkout are what
 OpenChamber runs after a reload.
@@ -40,7 +40,7 @@ OpenChamber runs after a reload.
 - The file is re-parsed before it is written; a patch that would produce
   invalid JSON is refused instead of saved.
 - A copy of the previous bytes is written to
-  `oh-my-opencode-slim.json.pantheon-backup` next to the config.
+  `oh-my-opencode-slim.json.openchamber-omos-helper-backup` next to the config.
 - Saving changes the file only. A running chat keeps its bound team until you
   run `/preset <name>` in that session; new sessions pick up the new values.
 
