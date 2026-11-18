@@ -1,4 +1,4 @@
-# Pantheon — oh-my-opencode-slim preset editor for OpenChamber
+# openchamber-omos-helper — oh-my-opencode-slim preset editor for OpenChamber
 
 An OpenChamber extension (rail panel) that edits the presets
 `oh-my-opencode-slim` reads from `~/.config/opencode/oh-my-opencode-slim.json[c]`:
@@ -23,7 +23,7 @@ writes the config file the plugin already reads.
 ## Install
 
 1. OpenChamber → **Settings → Extensions** → paste this folder's absolute path
-   (`/Users/ben/Desktop/project2/openchamber-pantheon`) into *Folder, ZIP, or URL*
+   (`/Users/ben/Desktop/project2/openchamber-omos-helper`) into *Folder, ZIP, or URL*
    → **Add**.
 2. Approve the local service when asked. The service is the Node process that
    reads and writes the config file; the panel is a sandboxed iframe and cannot

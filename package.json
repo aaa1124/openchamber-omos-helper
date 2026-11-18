@@ -1,10 +1,10 @@
 {
-  "name": "openchamber-pantheon",
+  "name": "openchamber-omos-helper",
   "version": "0.1.0",
   "private": true,
   "type": "module",
   "license": "MIT",
-  "description": "Edit oh-my-opencode-slim presets — per-agent model, variant and skills — from OpenChamber",
+  "description": "Edit oh-my-opencode-slim presets \u2014 per-agent model, variant and skills \u2014 from OpenChamber",
   "openchamber": {
     "apiVersion": 1,
     "engines": {
