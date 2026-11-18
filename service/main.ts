@@ -362,12 +362,13 @@ async function loadEffectiveAgents(directory) {
   const key = directory || '';
   if (agentsCache.value && agentsCache.key === key && Date.now() - agentsCache.at < 15_000) return agentsCache.value;
   const data = await serverGet('/api/agent', { directory });
-  const effective = {};
-  if (Array.isArray(data)) {
+  const available = Array.isArray(data);
+  const agents = {};
+  if (available) {
     for (const agent of data) {
       if (!agent || typeof agent.id !== 'string') continue;
       const model = agent.model;
-      effective[agent.id] = isObject(model)
+      agents[agent.id] = isObject(model)
         ? {
             model: typeof model.providerID === 'string' && typeof model.id === 'string' ? `${model.providerID}/${model.id}` : '',
             variant: typeof model.variant === 'string' ? model.variant : '',
@@ -375,8 +376,9 @@ async function loadEffectiveAgents(directory) {
         : { model: '', variant: '' };
     }
   }
-  agentsCache = { at: Date.now(), key, value: effective };
-  return effective;
+  const value = { available, agents };
+  agentsCache = { at: Date.now(), key, value };
+  return value;
 }
 
 /* ------------------------------------------------------------------ *
@@ -423,7 +425,7 @@ async function buildState(directory) {
   );
 
   const modelsResult = await loadModels(directory);
-  const effective = await loadEffectiveAgents(directory);
+  const running = await loadEffectiveAgents(directory);
 
   return {
     ok: true,
@@ -440,7 +442,91 @@ async function buildState(directory) {
     variants,
     models: modelsResult.models,
     modelsError: modelsResult.error,
-    effective,
+    effective: running.agents,
+  };
+}
+
+/* ------------------------------------------------------------------ *
+ * /status (compact readout for the Work Status section)
+ * ------------------------------------------------------------------ */
+
+async function buildStatus(directory) {
+  const userPath = userConfigPath();
+  const projectPath = projectConfigPath(directory);
+  if (!userPath) {
+    return {
+      ok: false,
+      error: 'oh-my-opencode-slim.json not found in ~/.config/opencode',
+      userConfigPath: null,
+      projectConfigPath: projectPath,
+      directory: directory || null,
+      presetName: null,
+      presetSource: null,
+      presetFound: false,
+      presetCount: 0,
+      agents: [],
+      driftCount: 0,
+      missingCount: 0,
+      runningAvailable: false,
+    };
+  }
+
+  const user = readConfig(userPath);
+  const project = projectPath ? readConfig(projectPath) : null;
+  const userPresets = isObject(user.data.presets) ? user.data.presets : {};
+  const projectPresets = project && isObject(project.data.presets) ? project.data.presets : {};
+  const mergedPresets = { ...userPresets, ...projectPresets };
+
+  const presetName =
+    typeof project?.data.preset === 'string'
+      ? project.data.preset
+      : typeof user.data.preset === 'string'
+        ? user.data.preset
+        : null;
+  const presetSource = presetName === null ? null : typeof project?.data.preset === 'string' ? 'project' : 'user';
+  const presetFound = presetName !== null && isObject(mergedPresets[presetName]);
+  const preset = presetFound ? normalizePreset(mergedPresets[presetName]) : {};
+
+  const running = await loadEffectiveAgents(directory);
+  const agents = Object.keys(preset)
+    .sort()
+    .map((name) => {
+      const configured = preset[name];
+      const live = running.available ? running.agents[name] : null;
+      const modelDrift = configured.model && live ? live.model !== configured.model : false;
+      const variantDrift = configured.variant && live ? (live.variant || '') !== configured.variant : false;
+      const status = !running.available
+        ? 'unknown'
+        : !live || !live.model
+          ? 'missing'
+          : modelDrift || variantDrift
+            ? 'drift'
+            : !configured.model
+              ? 'inherited'
+              : 'match';
+      return {
+        name,
+        model: configured.model,
+        variant: configured.variant,
+        runningModel: live?.model || '',
+        runningVariant: live?.variant || '',
+        status,
+      };
+    });
+
+  return {
+    ok: true,
+    userConfigPath: userPath,
+    projectConfigPath: projectPath,
+    directory: directory || null,
+    presetName,
+    presetSource,
+    presetFound,
+    presetCount: Object.keys(mergedPresets).length,
+    agents,
+    driftCount: agents.filter((agent) => agent.status === 'drift').length,
+    missingCount: agents.filter((agent) => agent.status === 'missing').length,
+    runningAvailable: running.available,
   };
 }
 
@@ -557,6 +643,10 @@ const server = http.createServer(async (req, res) => {
     }
     if (req.method === 'GET' && url.pathname === '/state') {
       send(res, 200, await buildState(url.searchParams.get('directory') || undefined));
+      return;
+    }
+    if (req.method === 'GET' && url.pathname === '/status') {
+      send(res, 200, await buildStatus(url.searchParams.get('directory') || undefined));
       return;
     }
     if (req.method === 'POST' && url.pathname === '/save') {

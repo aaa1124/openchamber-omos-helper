@@ -302,7 +302,10 @@ function render() {
     const effectiveText = effective?.model
       ? `Running as ${effective.model}${effective.variant ? ` · ${effective.variant}` : ''}`
       : 'Not currently registered';
-    const stale = effective?.model && (effective.model !== config.model || (effective.variant || '') !== (config.variant || ''));
+    const stale =
+      effective?.model &&
+      ((config.model ? effective.model !== config.model : false) ||
+        (config.variant ? (effective.variant || '') !== config.variant : false));
 
     const card = el(
       'div',

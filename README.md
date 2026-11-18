@@ -1,7 +1,8 @@
 # openchamber-omos-helper — oh-my-opencode-slim preset editor for OpenChamber
 
-An OpenChamber extension (rail panel) that edits the presets
-`oh-my-opencode-slim` reads from `~/.config/opencode/oh-my-opencode-slim.json[c]`:
+An OpenChamber extension (rail panel + chat Work Status section) that edits the
+presets `oh-my-opencode-slim` reads from
+`~/.config/opencode/oh-my-opencode-slim.json[c]`:
 per-agent **model**, **variant** and **skills**, plus which preset is the
 default. It is the piece the TUI gives you and OpenChamber did not: a form
 instead of hand-editing JSON.
@@ -11,6 +12,8 @@ writes the config file the plugin already reads.
 
 ## What it shows
 
+- A compact **Work Status** section in the chat: the effective default preset,
+  its agents and models, and which agents differ from the running server.
 - Every preset in the user config, with the active default marked.
 - One card per agent: model (`provider/model`, with the full OpenChamber model
   list as suggestions), variant, and skills (`*` for all).
@@ -30,6 +33,10 @@ writes the config file the plugin already reads.
    touch the filesystem itself.
 3. Open the **openchamber-omos-helper** icon in the rail.
 
+The same data shows up as an **Agent presets** section in the chat's Work
+Status panel. Hide or move it from the panel's section chooser; the section is
+read-only and its **Open editor** button returns to the full editor.
+
 The extension is installed in place, so edits to the checkout are what
 OpenChamber runs after a reload.
 
@@ -48,19 +55,22 @@ OpenChamber runs after a reload.
 
 ```bash
 bun install          # @openchamber/sdk (already vendored in node_modules here)
-bun run build        # builds panel/main.js and service/main.js
+bun run build        # builds panel/main.js, status/main.js and service/main.js
 bun run check        # what OpenChamber would refuse at install
 ```
 
 OpenChamber never compiles TypeScript or runs a build during install: the built
-`panel/main.js` and `service/main.js` are committed and that is what ships.
+`panel/main.js`, `status/main.js` and `service/main.js` are committed and that
+is what ships.
 
 Layout:
 
 ```
-package.json          manifest (apiVersion 1, panel + service)
+package.json          manifest (apiVersion 1, panel + status section + service)
 panel/index.html      markup and theme CSS
 panel/main.ts         editor UI, built to panel/main.js
+status/index.html     Work Status section markup and CSS
+status/main.ts        compact readout, built to status/main.js
 service/main.ts       JSONC parser/patcher + OpenChamber API reads, built to service/main.js
 icon.svg
 ```
@@ -68,7 +78,8 @@ icon.svg
 The service reads the model registry and effective agent models from the local
 OpenChamber API through `~/.config/openchamber/settings.json`
 (`desktopLocalPort`, `desktopLocalClientToken`). If that is unavailable the
-editor still works, with free-text model fields.
+editor still works, with free-text model fields, and the Work Status section
+reports running models as unavailable.
 
 ## License
 
