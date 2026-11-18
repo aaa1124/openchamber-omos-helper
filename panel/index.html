@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Pantheon</title>
+<style>
+  :root { color-scheme: light dark; }
+  * { box-sizing: border-box; }
+  [hidden] { display: none !important; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: var(--oc-font, system-ui, -apple-system, "Segoe UI", sans-serif);
+    font-size: 0.857rem;
+    line-height: 1.5;
+    color: var(--oc-fg, inherit);
+    background: transparent;
+    padding: 12px;
+  }
+  h1 { font-size: 0.929rem; margin: 0; font-weight: 650; }
+  h2 { font-size: 0.857rem; margin: 18px 0 6px; font-weight: 650; }
+  .muted { color: var(--oc-muted, #888); }
+  .mono { font-family: var(--oc-mono, ui-monospace, Consolas, monospace); }
+  .row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+  .spread { justify-content: space-between; }
+  .head { display: flex; align-items: baseline; gap: 8px; }
+  .path { font-family: var(--oc-mono, ui-monospace, Consolas, monospace); font-size: 0.714rem; color: var(--oc-muted, #888); word-break: break-all; }
+  select, input[type="text"] {
+    font: inherit;
+    color: var(--oc-fg, inherit);
+    background: var(--oc-subtle, rgba(128,128,128,0.14));
+    border: 1px solid var(--oc-border, rgba(128,128,128,0.3));
+    border-radius: 6px;
+    padding: 4px 6px;
+    min-width: 0;
+  }
+  select:focus, input[type="text"]:focus { outline: 2px solid var(--oc-primary, #6af); outline-offset: 0; }
+  button {
+    font: inherit;
+    color: var(--oc-fg, inherit);
+    background: var(--oc-subtle, rgba(128,128,128,0.14));
+    border: 1px solid var(--oc-border, rgba(128,128,128,0.3));
+    border-radius: 6px;
+    padding: 4px 10px;
+    cursor: pointer;
+  }
+  button:hover:not(:disabled) { border-color: var(--oc-primary, #6af); }
+  button:disabled { opacity: 0.5; cursor: default; }
+  button.primary {
+    background: var(--oc-primary, #6af);
+    border-color: var(--oc-primary, #6af);
+    color: var(--oc-primary-fg, #fff);
+    font-weight: 600;
+  }
+  .agent {
+    border: 1px solid var(--oc-border, rgba(128,128,128,0.25));
+    border-radius: 8px;
+    padding: 8px;
+    margin-top: 8px;
+  }
+  .agent .name { font-weight: 650; }
+  .agent .fields { display: grid; grid-template-columns: minmax(0, 1.7fr) minmax(0, 0.7fr); gap: 6px; margin-top: 6px; }
+  .agent .fields .skills { grid-column: 1 / -1; }
+  .agent label { display: block; font-size: 0.714rem; color: var(--oc-muted, #888); margin-bottom: 2px; }
+  .agent input { width: 100%; }
+  .active { font-size: 0.714rem; color: var(--oc-muted, #888); margin-top: 4px; }
+  .active.stale { color: var(--oc-warning, #d90); }
+  .banner {
+    margin-top: 10px;
+    padding: 8px 10px;
+    border-radius: 8px;
+    border: 1px solid var(--oc-border, rgba(128,128,128,0.3));
+    font-size: 0.786rem;
+  }
+  .banner.error { border-color: var(--oc-error, #f66); color: var(--oc-error, #f66); }
+  .banner.ok { border-color: var(--oc-success, #3c3); color: var(--oc-success, #3c3); }
+  .banner.info { color: var(--oc-muted, #888); }
+  .footer { margin-top: 14px; font-size: 0.714rem; color: var(--oc-muted, #888); }
+  .footer code { font-family: var(--oc-mono, ui-monospace, Consolas, monospace); }
+  .toolbar { margin-top: 10px; gap: 6px; }
+  .toolbar .grow { flex: 1; }
+  .hint { font-size: 0.714rem; color: var(--oc-muted, #888); margin-top: 2px; }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script src="main.js"></script>
+</body>
+</html>
